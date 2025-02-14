@@ -40,17 +40,21 @@ class CurlHTTPClient implements HTTPClient
     private $timeout;
     /** @var int|null */
     private $connectTimeout;
+    private $proxy;
+    private $proxyuserpwd;
 
     /**
      * CurlHTTPClient constructor.
      *
      * @param string $channelToken Access token of your channel.
      */
-    public function __construct($channelToken)
+    public function __construct($channelToken, $proxy = null, $proxyuserpwd = null)
     {
         $this->authHeaders = [
             "Authorization: Bearer $channelToken",
         ];
+        $this->proxy = $proxy;
+        $this->proxyuserpwd = $proxyuserpwd;
         $this->userAgentHeader = [
             'User-Agent: LINE-BotSDK-PHP/' . Meta::VERSION,
         ];
@@ -149,6 +153,11 @@ class CurlHTTPClient implements HTTPClient
             CURLOPT_BINARYTRANSFER => true,
             CURLOPT_HEADER => true,
         ];
+        if($this->proxy){
+            $options[CURLOPT_HTTPPROXYTUNNEL] = 1;
+            $options[CURLOPT_PROXY] = $this->proxy;
+            $options[CURLOPT_PROXYUSERPWD] = $this->proxyuserpwd;
+        }
         if ($method === 'POST') {
             if (is_null($reqBody)) {
                 // Rel: https://github.com/line/line-bot-sdk-php/issues/35
