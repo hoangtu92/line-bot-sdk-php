@@ -235,7 +235,8 @@ class LINEBot
         MessageBuilder $messageBuilder,
         $notificationDisabled = false,
         $retryKey = null,
-        array $customAggregationUnits = array()
+        array $customAggregationUnits = array(),
+        $endpointBase = null
     ) {
         $headers = ['Content-Type: application/json; charset=utf-8'];
         if (isset($retryKey)) {
@@ -249,7 +250,8 @@ class LINEBot
         if (!empty($customAggregationUnits)) {
             $params['customAggregationUnits'] = $customAggregationUnits;
         }
-        return $this->httpClient->post($this->endpointBase . '/v2/bot/message/push', $params, $headers);
+        if(!$endpointBase) $endpointBase = $this->endpointBase;
+        return $this->httpClient->post($endpointBase . '/v2/bot/message/push', $params, $headers);
     }
 
     /**
