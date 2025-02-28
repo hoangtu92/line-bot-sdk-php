@@ -90,9 +90,10 @@ class LINEBot
      * @param string $userId The user ID to retrieve profile.
      * @return Response
      */
-    public function getProfile($userId)
+    public function getProfile($userId, $endpointBase = null)
     {
-        return $this->httpClient->get($this->endpointBase . '/v2/bot/profile/' . urlencode($userId));
+        if(!$endpointBase) $endpointBase = $this->endpointBase;
+        return $this->httpClient->get($endpointBase . '/v2/bot/profile/' . urlencode($userId));
     }
 
     /**
@@ -543,9 +544,10 @@ class LINEBot
      * @param RichMenuBuilder $richMenuBuilder
      * @return Response
      */
-    public function createRichMenu($richMenuBuilder)
+    public function createRichMenu($richMenuBuilder, $endpointBase = null)
     {
-        return $this->httpClient->post($this->endpointBase . '/v2/bot/richmenu', $richMenuBuilder->build());
+        if(!$endpointBase) $endpointBase = $this->endpointBase;
+        return $this->httpClient->post($endpointBase . '/v2/bot/richmenu', $richMenuBuilder->build());
     }
 
     /**
@@ -566,9 +568,10 @@ class LINEBot
      * @param string $richMenuId ID of an uploaded rich menu
      * @return Response
      */
-    public function setDefaultRichMenuId($richMenuId)
+    public function setDefaultRichMenuId($richMenuId, $endpointBase = null)
     {
-        $url = sprintf('%s/v2/bot/user/all/richmenu/%s', $this->endpointBase, urlencode($richMenuId));
+        if(!$endpointBase) $endpointBase = $this->endpointBase;
+        $url = sprintf('%s/v2/bot/user/all/richmenu/%s', $endpointBase, urlencode($richMenuId));
         return $this->httpClient->post($url, []);
     }
 
